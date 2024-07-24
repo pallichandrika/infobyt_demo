@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Login from "./signin/page";
+import Login from "./signup/page";
+import Slidebar from "./components/slidebar/page";
  
 
 export default function Home() {
@@ -7,7 +8,6 @@ export default function Home() {
     <main className="">
       
      <Login/>
- 
    
  
     </main>
