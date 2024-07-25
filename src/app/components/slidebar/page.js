@@ -1,15 +1,15 @@
 import React from 'react';
-import { CalendarIcon, ChartBarIcon, FolderIcon, HomeIcon, InboxIcon, UsersIcon } from '@heroicons/react/outline';
+// import { CalendarIcon, ChartBarIcon, FolderIcon, InboxIcon, UsersIcon } from '@heroicons/react/outline';
 import { Col, Row } from 'antd';
 
-const navigation = [
-  { name: 'Dashboard', icon: HomeIcon, href: '#', current: true },
-  { name: 'Team', icon: UsersIcon, href: '#', count: 3, current: false },
-  { name: 'Projects', icon: FolderIcon, href: '#', count: 4, current: false },
-  { name: 'Calendar', icon: CalendarIcon, href: '#', current: false },
-  { name: 'Documents', icon: InboxIcon, href: '#', count: 12, current: false },
-  { name: 'Reports', icon: ChartBarIcon, href: '#', current: false },
-];
+// const navigation = [
+//   { name: 'Dashboard', href: '#', current: true },
+//   { name: 'Team', icon: UsersIcon, href: '#', count: 3, current: false },
+//   { name: 'Projects', icon: FolderIcon, href: '#', count: 4, current: false },
+//   { name: 'Calendar', icon: CalendarIcon, href: '#', current: false },
+//   { name: 'Documents', icon: InboxIcon, href: '#', count: 12, current: false },
+//   { name: 'Reports', icon: ChartBarIcon, href: '#', current: false },
+// ];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');

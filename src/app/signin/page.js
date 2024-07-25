@@ -1,19 +1,48 @@
-"use client"
-import { Button, Modal } from 'antd';
+"use client";
+import { Button, Modal, Select, Input, Typography } from 'antd';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Flex, Input, Typography } from 'antd';
-const { Title } = Typography;
+import { useForm, useWatch } from 'react-hook-form';
+import { useUser } from '../components/context/page';
 
-const Signup = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+const { Title } = Typography;
+const { Option } = Select;
+
+const options = [
+  {
+    label: 'nearluk',
+    value: 'nearluk'
+  },
+  {
+    label: 'stoxverse',
+    value: 'stoxverse'
+  },
+  {
+    label: 'infobyte',
+    value: 'infobyte'
+  },
+  {
+    label: 'digital marketing',
+    value: 'digital marketing'
+  },
+];
+
+const Signin = () => {
+  const { register, handleSubmit, control, formState: { errors }, setValue } = useForm();
 
   const onSubmit = (data) => {
     console.log('Form submitted with:', data);
   };
 
-  const mobileValue = watch('mobile', '');
+  const {currentUser} = useUser()
+  console.log(currentUser.email)
+
+  const mobileValue = useWatch({
+    control,
+    name: 'mobile',
+    defaultValue: '',
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -24,11 +53,9 @@ const Signup = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const onChange = (text) => {
-    console.log('onChange:', text);
-  };
-  const sharedProps = {
-    onChange,
+  const onChange = (value) => {
+    setValue('workspace', value);
+    console.log('Select onChange:', value);
   };
   return (
     <>
@@ -109,6 +136,8 @@ const Signup = () => {
                       id="email"
                       name="email"
                       type="email"
+                      disabled
+                      defaultValue={currentUser.email || ''}
                       {...register('email', {
                         required: 'Email is required',
                         pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' }
@@ -116,7 +145,7 @@ const Signup = () => {
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       placeholder="Enter your email"
                     />
-                    {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>}
+                    {/* {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>} */}
                   </div>
                 </div>
                 <div>
@@ -127,8 +156,7 @@ const Signup = () => {
                     <input
                       id="mobile"
                       type="tel"
-                      maxLength="10"
-                      // onChange={mobileValue}
+                      maxLength={10}
                       {...register('mobile', {
                         required: 'Mobile number is required',
                       })}
@@ -137,7 +165,7 @@ const Signup = () => {
                     />
                     {errors.mobile && <p className="mt-2 text-sm text-red-600">{errors.mobile.message}</p>}
                     {mobileValue.length === 10 && <button
-                      type="submit"
+                      type="button"
                       onClick={showModal}
                       className="mt-3 bg-indigo-500 border border-transparent rounded-md py-2 px-4 flex justify-end text-base font-medium text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500"
                     >
@@ -145,34 +173,35 @@ const Signup = () => {
                     </button>}
                     <Modal width={300} title="Enter Otp Code" className='verify__popup' open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                       <div className='otp__input'>
-                        <Input.OTP length={5} {...sharedProps} />
+                        <Input maxLength={5} placeholder="Enter OTP" />
                         <Button type="primary mt-5">Verify Otp</Button>
                       </div>
                     </Modal>
                   </div>
                 </div>
                 <div>
-                  <div>
-                    <label htmlFor="workSpaceName" className="block text-sm font-medium text-gray-700">
-                      WorkSpace Name
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        id="workSpaceName"
-                        name="workSpaceName"
-                        type="text"
-                        {...register('workSpaceName', {
-                          required: 'WorkSpace Name is required',
-                          minLength: { value: 10, message: 'WorkSpace Name must be at least 10 characters long' },
-                          maxLength: { value: 20, message: 'WorkSpace Name must be no more than 20 characters long' }
-                        })}
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter your WorkSpace Name"
-                      />
-                      {errors.workSpaceName && <p className="mt-2 text-sm text-red-600">{errors.workSpaceName.message}</p>}
-                    </div>
+                  <label htmlFor="workspace" className="block text-sm font-medium text-gray-700">
+                    WorkSpace Name
+                  </label>
+                  <div className="mt-1">
+                    <Select
+                      id="workspace"
+                      mode="multiple"
+                      allowClear
+                      className="w-full"
+                      placeholder="Select your WorkSpace"
+                      onChange={onChange}
+                    >
+                      {options.map(option => (
+                        <Option key={option.value} value={option.value}>
+                          {option.label}
+                        </Option>
+                      ))}
+                    </Select>
+                    {errors.workspace && <p className="mt-2 text-sm text-red-600">{errors.workspace.message}</p>}
                   </div>
-
+                </div>
+                <div>
                   <button
                     type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -186,7 +215,7 @@ const Signup = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Signup;
+export default Signin;
