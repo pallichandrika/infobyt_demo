@@ -34,11 +34,11 @@ const Login = () => {
         api.open({
           message: 'Notification',
           description: 'Email already exists.',
-          placement: 'topLeft',
+          placement: 'topRight',
           duration: 3,
           style: {
-            backgroundColor: '#ff4d4f', // Danger color
-            color: '#fff' // Text color
+            backgroundColor: '#ff4d4f', 
+            color: '#fff'
           }
         });
       }
